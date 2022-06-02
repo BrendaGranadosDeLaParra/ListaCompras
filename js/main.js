@@ -1,10 +1,15 @@
+let contador = 0;
+let costoTotal = 0;
+let totalEnproductos =0;
 let element = document.getElementById("totalPrecio");
 element.innerHTML="Total en precio";
 
 let txtNombre = document.getElementById("Name");
 //txtNombre.value="Leche Semidescremada";
 //console.log(txtNombre.value);
-let txtNumber =document.getElementById("Number"); 
+let txtNumber = document.getElementById("Number"); 
+
+let total =document.getElementById("precioTotal");
 
 // let campos = document.getElementsByClassName("campo");
 // campos[0].value ="Leche descremada deslactosada light"
@@ -21,36 +26,94 @@ let txtNumber =document.getElementById("Number");
 // }
 
 let tabla = document.getElementById("tablaListaCompras");
-let cuerpoTabla =tabla.getElementsByTagName("tbody");
+let cuerpoTabla = tabla.getElementsByTagName("tbody");
 
-cuerpoTabla[0].innerHTML = `<tr>
-</tr>
-<tr>
-<th scope="row">1</th>
-<td>Leche descremada</td>
-<td>3</td>
-<td>$ 23.00</td>
-</tr>`;
+//cuerpoTabla[0].innerHTML = `<tr>
+//</tr>
+//<tr>
+//<th scope="row">1</th>
+//<td>Leche descremada</td>
+//<td>3</td>
+//<td>$ 23.00</td>
+//</tr>`;
+ function validarNombre(){
+     if(txtNombre.value.length <3){
+         return false;
+     }
+     return true;
+ }
 
+ function validarCantidad(){
+     if (txtNumber.value.length==0){
+         return false;        
+     }
+     if(isNaN(txtNumber.value)){
+         return false;
+     }
+     if (parseFloat(txtNumber.value)<=0){
+         return false;
+     }
+     return true;
+ }
 
 let agregar = document.getElementById("btnAgregar");
 
 agregar.addEventListener ("click", (event)=> {
-    let precio =Math.random() * 50;
+    event.preventDefault();
+    let lista="";
+    if(!validarNombre()){
+        txtNombre.style.border="red thin solid";
+        lista+="<li>Se debe escribir un nombre válida</li>";
+            }
+
+    if(!validarCantidad()){
+        txtNumber.style.border="red thin solid";
+        lista+="<li>Se debe escribir una cantidad válida</li>";
+
+    }        
+    if ((! validarNombre()) || (! validarCantidad()) ){
+        document.getElementById("alertValidaciones").innerHTML=
+        `!!!Los campos deben ser llenados correctamente!!!;
+        <ul>${lista}</ul>`
+        document.getElementById("alertValidaciones").style.display="block";
+
+        setTimeout(function(){
+            document.getElementById("alertValidaciones").style.display="none";
+        },
+        5000
+        );
+        return false;      
+    }
+    txtNumber.style.border="";
+    txtNombre.style.border="";
+    document.getElementById("alertValidaciones").style.display="none";
+    contador++;
+    let productos = document.getElementById("contadorProductos").innerHTML=contador;
+    let precio = (Math.floor( (Math.random() * 50)*100))/100;
+    let cantidad = parseFloat(txtNumber.value);
+     totalEnproductos +=Math.ceil(cantidad):parseInt(cantidad);
+     document.getElementById("productosTotal").innerHTML=totalEnproductos;
+    costoTotal += (precio * cantidad);
+    total.innerHTML = `$ ${costoTotal.toFixed(2)}`
     let tmp = `<tr>
-    </tr>
-    <tr>
-    <th scope="row">1</th>
+        <th scope="row">${contador}</th>
     <td> ${txtNombre.value}</td>
-    <td> ${txt.Number.value}3</td>
+    <td> ${txt.Number.value}</td>
     <td>$ ${precio}</td>
-    </tr>`
+    </tr>`;
    console.log(tmp);
    cuerpoTabla[0].innerHTML += tmp;
    txtNumber.value="";
    txtNombre.value="";
    txtNombre.focus();
    
-}
-);
+});
+
+txtNombre.addEventListener("blur", (event)=>{
+    event.target.value = event.target.value.trim();
+});
+
+txtNombre.addEventListener("blur", (event)=>{
+    event.target.value = event.target.value.trim();
+});
 
